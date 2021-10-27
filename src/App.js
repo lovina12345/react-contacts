@@ -1,22 +1,45 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./App.css";
-import ContactsForm from "./components/ContactForm";
-import ContactsList from "./components/ContactList";
+import Contact from "./component/Contact";
+import ContactForms from "./component/ContactForms";
 
 function App() {
-  const [Contacts, setContacts] = useState([]);
+  
+  const [contacts, setContacts] = useState([]);
 
-  function addContact(Contact) {
-    setContacts([...Contacts, Contact]);
-  }
+  
+  const handleDeleteContact = (contactId) => {
+    const filterContact = contacts.filter((contact) => {
+      return contactId !== contact.id;
+    });
+
+    setContacts(filterContact);
+  };
+
+  
+  const handleEditContact = (newContact, contactId) => {
+    
+    setContacts(
+      contacts.map((contact) => {
+        if (contactId === contact.id) {
+          return newContact;
+        } else {
+          return contact;
+        }
+      })
+    );
+  };
 
   return (
-    <div className="App">
-      <ContactsForm addContact={addContact} />
-      <ContactsList data={Contacts} />
+    <div className>
+      <div>React Contact App</div>
+      <ContactForms/>
+      <Contact
+        deleteContact={handleDeleteContact}
+        editContact={handleEditContact}
+      />
     </div>
   );
 }
 
 export default App;
-
