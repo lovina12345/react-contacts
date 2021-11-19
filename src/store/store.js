@@ -1,8 +1,19 @@
-import {createStore} from "redux"
-import contactReducer from "../reducers/contactReducer"
+import reducer from "../reducers/contactReducer";
+import { createStore, applyMiddleware, compose } from "redux";
+import thunk from "redux-thunk";
 
-var store = createStore(contactReducer)
+import firebase from "../firebase/Config";
 
+import { getFirebase, reactReduxFirebase } from "react-redux-firebase";
+import { getFirestore, reduxFirestore } from "redux-firestore";
 
+const Store = createStore(
+  reducer,
+  compose(
+    applyMiddleware(thunk.withExtraArgument({ getFirebase, getFirestore })),
+    reactReduxFirebase(firebase),
+    reduxFirestore(firebase)
+  )
+);
 
-export default store;
+export default Store;
